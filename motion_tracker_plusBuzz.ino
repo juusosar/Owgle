@@ -97,11 +97,17 @@ void follow()
 
 void buzz()
 {
-  if (cm_right <= shout || cm_left <= shout)
+   if (cm_right <= shout)
+  {
+    tone(buzzer, 750);
+    delay(1000);
+    noTone(buzzer);
+    angle = 180;
+  }
+  if (cm_left <= shout)
   {
     tone(buzzer, 750);
     delay(1000);
     noTone(buzzer);
     angle = 0;
-  }
 }
