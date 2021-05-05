@@ -10,7 +10,10 @@ int servo = 2;
 
 int buzzer = 9;
 
-int on_off = 7;
+int on_off = 6;
+
+int red_LED = 8;
+int white_LED = 7;
 
 long duration_right, duration_left, cm_right, cm_left;
 
@@ -35,13 +38,22 @@ void setup()
 
   pinMode(on_off, INPUT);
 
+  pinMode(red_LED, OUTPUT);
+  pinMode(white_LED, OUTPUT);
+
 }
 
 void loop() // An on/off switch controls the running of the loop. Loop consists of two sensors sending and receiving signals,
             // their signals are converted to centimeters which determine the action of the follow() and buzz() functions.
-{
+{ 
+  digitalWrite(red_LED, LOW);
+  digitalWrite(white_LED, LOW);
+  
   if (digitalRead(on_off) == HIGH)
   {
+    digitalWrite(red_LED, HIGH);
+    digitalWrite(white_LED, HIGH);
+    
     digitalWrite(sensor_1_trig, LOW);
     delayMicroseconds(5);
     digitalWrite(sensor_1_trig, HIGH);
@@ -87,22 +99,22 @@ void follow() // function which determines the servo's movement based on the sen
 {
   if (cm_left <= threshold || cm_right <= threshold)
   {
-    if (cm_left + 2 < cm_right) 
+    if (cm_left + 3 < cm_right) 
     {
-      angle = angle + 2;
+      angle = angle + 4;
     }
-    if (cm_right + 2 < cm_left)
+    if (cm_right + 3 < cm_left)
     {
-      angle = angle - 2;
+      angle = angle - 4;
     }
   }
-  if (angle > 180)
+  if (angle > 150)
   {
-    angle = 180;
+    angle = 150;
   }
-  if (angle < 0)
+  if (angle < 30)
   {
-    angle = 0;
+    angle = 30;
   }
   myservo.write(angle);
 }
@@ -114,7 +126,7 @@ void buzz() // function to the owl to make a sound and turn its head away from t
     {
       pass;
     } else {
-      tone(buzzer, 750);
+      tone(buzzer, 1500);
       delay(1000);
       noTone(buzzer);
       angle = 180;
@@ -125,7 +137,7 @@ void buzz() // function to the owl to make a sound and turn its head away from t
     {
       pass;
     } else {
-      tone(buzzer, 750);
+      tone(buzzer, 1500);
       delay(1000);
       noTone(buzzer);
       angle = 0;
